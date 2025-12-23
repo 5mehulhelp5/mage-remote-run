@@ -6,16 +6,17 @@ jest.unstable_mockModule('../lib/api/factory.js', () => ({
     createClient: jest.fn()
 }));
 
+// Robust Chalk Mock for Chaining
+const chalkProxy = new Proxy(function (str) { return str; }, {
+    get: (target, prop) => {
+        if (prop === 'default') return chalkProxy;
+        return chalkProxy;
+    },
+    apply: (target, thisArg, args) => args[0]
+});
+
 jest.unstable_mockModule('chalk', () => ({
-    default: {
-        blue: (t) => t,
-        green: (t) => t,
-        red: (t) => t,
-        yellow: (t) => t,
-        gray: (t) => t,
-        cyan: (t) => t,
-        bold: (t) => t,
-    }
+    default: chalkProxy
 }));
 
 jest.unstable_mockModule('cli-table3', () => ({
@@ -25,8 +26,13 @@ jest.unstable_mockModule('cli-table3', () => ({
     }))
 }));
 
+jest.unstable_mockModule('html-to-text', () => ({
+    convert: jest.fn((text) => text.replace(/<[^>]*>/g, ''))
+}));
+
 const factoryMod = await import('../lib/api/factory.js');
 const { registerProductsCommands } = await import('../lib/commands/products.js');
+const inquirer = await import('inquirer');
 
 describe('Product Commands', () => {
     let program;
@@ -94,13 +100,14 @@ describe('Product Commands', () => {
         expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Test Description')); // html-to-text should remove tags
     });
 
-    it('types: should list product types', async () => {
+    it('type list: should list product types', async () => {
         mockClient.get.mockResolvedValue([
             { name: 'Simple', label: 'Simple Product' }
         ]);
 
-        await program.parseAsync(['node', 'test', 'product', 'types']);
+        await program.parseAsync(['node', 'test', 'product', 'type', 'list']);
 
+        expect(mockClient.get).toHaveBeenCalledWith('V1/products/types');
         expect(consoleLogSpy).toHaveBeenCalledWith('MOCK_TABLE');
     });
 });
