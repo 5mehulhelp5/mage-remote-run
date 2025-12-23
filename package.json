@@ -16,6 +16,10 @@
   },
   "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/muench-dev/mage-remote-run"
+  },
   "bin": {
     "mage-remote-run": "./bin/mage-remote-run.js"
   },
