@@ -4,7 +4,7 @@
   "description": "The remote swiss army knife for Magento Open Source, Mage-OS, Adobe Commerce",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test": "NODE_OPTIONS=\"--experimental-vm-modules --localstorage-file=./.localstorage\" jest",
     "start": "node bin/mage-remote-run.js",
     "release": "release-it"
   },

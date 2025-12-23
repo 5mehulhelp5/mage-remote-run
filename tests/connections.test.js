@@ -6,7 +6,8 @@ jest.unstable_mockModule('../lib/config.js', () => ({
     loadConfig: jest.fn(),
     saveConfig: jest.fn(),
     addProfile: jest.fn(),
-    getActiveProfile: jest.fn()
+    getActiveProfile: jest.fn(),
+    clearTokenCache: jest.fn()
 }));
 
 jest.unstable_mockModule('../lib/api/factory.js', () => ({
