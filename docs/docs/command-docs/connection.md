@@ -77,3 +77,11 @@ Test connectivity for the active profile or all profiles.
 mage-remote-run connection test
 mage-remote-run connection test --all
 ```
+
+## connection clear-token-cache
+
+Remove the cached access token so the next command fetches a fresh one.
+
+```bash
+mage-remote-run connection clear-token-cache
+```
