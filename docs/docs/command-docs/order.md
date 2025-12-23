@@ -15,10 +15,11 @@ List orders with paging controls.
 mage-remote-run order list --page 1 --size 20
 ```
 
-Options:
+### Options
 
-- `-p, --page <number>`: Page number
-- `-s, --size <number>`: Page size
+- `-p, --page <number>`: Page number (default: 1)
+- `-s, --size <number>`: Page size (default: 20)
+- `-f, --format <type>`: Output format (text, json, xml) (default: text)
 
 ## order search `<query>`
 

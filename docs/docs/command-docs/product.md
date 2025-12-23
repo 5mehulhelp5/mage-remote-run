@@ -19,11 +19,12 @@ List products with pagination and sorting.
 mage-remote-run product list --sort-by price --sort-order DESC
 ```
 
-**Options:**
-- `-p, --page <number>`: Page number (default: "1")
-- `-s, --size <number>`: Page size (default: "20")
-- `--sort-by <attribute>`: Attribute to sort by (default: "id")
-- `--sort-order <order>`: Sort order (ASC or DESC) (default: "ASC")
+**### Options**
+- `-p, --page <number>`: Page number (default: 1)
+- `-s, --size <number>`: Page size (default: 20)
+- `--sort-by <field>`: Field to sort by (default: entity_id)
+- `--sort-order <order>`: Sort order (ASC or DESC) (default: ASC)
+- `-f, --format <type>`: Output format (text, json, xml) (default: text)
 
 ## `product show`
 

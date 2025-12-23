@@ -50,6 +50,7 @@ mage-remote-run inventory source list --page 1 --size 20
 **Options:**
 - `-p, --page <number>`: Page number (default: "1")
 - `-s, --size <number>`: Page size (default: "20")
+- `-f, --format <type>`: Output format (text, json, xml) (default: text)
 
 ## `inventory resolve-stock`
 
