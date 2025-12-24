@@ -27,7 +27,14 @@ program
         subcommandDescription: (cmd) => chalk.gray(cmd.description()),
         optionTerm: (option) => chalk.yellow(option.flags),
         optionDescription: (option) => chalk.gray(option.description)
-    });
+    })
+    .addHelpText('before', chalk.hex('#FFA500')(`
+   _ __ ___   __ _  __ _  ___      _ __ ___ _ __ ___   ___ | |_ ___      _ __ _   _ _ __ 
+  | '_ \` _ \\ / _\` |/ _\` |/ _ \\____| '__/ _ \\ '_ \` _ \\ / _ \\| __/ _ \\____| '__| | | | '_ \\
+  | | | | | | (_| | (_| |  __/____| | |  __/ | | | | | (_) | ||  __/____| |  | |_| | | | |
+  |_| |_| |_|\\__,_|\\__, |\\___|    |_|  \\___|_| |_| |_|\\___/ \\__\\___|    |_|   \\__,_|_| |_|
+                   |___/                                                                   
+`));
 
 
 
