@@ -1,4 +1,9 @@
-# company
+---
+title: company
+sidebar_position: 3
+---
+
+# Company Commands
 
 Manage B2B companies in Adobe Commerce.
 

@@ -1,6 +1,6 @@
 ---
 title: adobe-io-event
-sidebar_position: 10
+sidebar_position: 2
 ---
 
 # adobe-io-event

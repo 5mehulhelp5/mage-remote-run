@@ -1,9 +1,9 @@
 ---
 title: website
-sidebar_position: 3
+sidebar_position: 13
 ---
 
-# website
+# Website Commands
 
 Manage Magento websites.
 

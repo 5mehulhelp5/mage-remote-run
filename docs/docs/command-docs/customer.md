@@ -3,7 +3,7 @@ title: customer
 sidebar_position: 5
 ---
 
-# customer
+# Customer Commands
 
 Manage customers.
 

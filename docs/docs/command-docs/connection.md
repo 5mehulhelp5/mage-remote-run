@@ -1,9 +1,9 @@
 ---
 title: connection
-sidebar_position: 2
+sidebar_position: 4
 ---
 
-# connection
+# Connection Commands
 
 Manage connection profiles for Magento instances. Profiles store system type, instance URL, and authentication settings. The active profile is used for all API commands.
 

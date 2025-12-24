@@ -1,60 +1,62 @@
 ---
 title: store
-sidebar_position: 4
+sidebar_position: 10
 ---
 
-# store
+# Store Commands
 
-Manage store groups and store views.
+Manage store groups, views, and configurations.
 
 ## Store Groups
 
-### store list
+Manage store groups.
+
+### List Store Groups
 
 ```bash
-mage-remote-run store list
+mage-remote-run store group list [options]
 ```
 
-### store search `<query>`
+**Options:**
 
-```bash
-mage-remote-run store search default
-```
+| Option | Description | Default |
+|---|---|---|
+| `-f, --format <type>` | Output format (`text`, `json`, `xml`) | `text` |
 
-### store edit `<id>`
+### Other Commands
 
-```bash
-mage-remote-run store edit 1
-```
-
-### store delete `<id>`
-
-```bash
-mage-remote-run store delete 2
-```
+- `store group search <query>`: Search store groups by name or code.
+- `store group delete <id>`: Delete a store group.
+- `store group edit <id>`: Edit a store group.
 
 ## Store Views
 
-### store view list
+Manage store views.
+
+### List Store Views
 
 ```bash
-mage-remote-run store view list
+mage-remote-run store view list [options]
 ```
 
-### store view search `<query>`
+**Options:**
+
+| Option | Description | Default |
+|---|---|---|
+| `-f, --format <type>` | Output format (`text`, `json`, `xml`) | `text` |
+
+### Other Commands
+
+- `store view search <query>`: Search store views by name or code.
+- `store view delete <id>`: Delete a store view.
+- `store view edit <id>`: Edit a store view.
+
+## Store Configuration
+
+### List Store Configs
+
+List store configuration details including currencies and locales.
 
 ```bash
-mage-remote-run store view search en
-```
-
-### store view edit `<id>`
-
-```bash
-mage-remote-run store view edit 1
-```
-
-### store view delete `<id>`
-
-```bash
-mage-remote-run store view delete 3
+mage-remote-run store config list
 ```

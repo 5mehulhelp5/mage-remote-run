@@ -1,9 +1,9 @@
 ---
 title: product
-sidebar_position: 7
+sidebar_position: 9
 ---
 
-# product
+# Product Commands
 
 Inspect product types and attributes.
 

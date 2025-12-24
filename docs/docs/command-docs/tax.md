@@ -1,9 +1,9 @@
 ---
 title: tax
-sidebar_position: 9
+sidebar_position: 11
 ---
 
-# tax
+# Tax Class Commands
 
 Manage tax classes.
 
