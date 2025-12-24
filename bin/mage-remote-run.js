@@ -24,23 +24,63 @@ import { registerCustomersCommands } from '../lib/commands/customers.js';
 import { registerOrdersCommands } from '../lib/commands/orders.js';
 import { registerEavCommands } from '../lib/commands/eav.js';
 import { registerProductsCommands } from '../lib/commands/products.js';
+import { registerCompanyCommands } from '../lib/commands/company.js';
 import { registerTaxCommands } from '../lib/commands/tax.js';
 import { registerInventoryCommands } from '../lib/commands/inventory.js';
 import { registerAdobeIoEventsCommands } from '../lib/commands/adobe-io-events.js';
+import { getActiveProfile } from '../lib/config.js';
 
 registerConnectionCommands(program);
-registerWebsitesCommands(program);
-registerStoresCommands(program);
-registerCustomersCommands(program);
-registerOrdersCommands(program);
-registerEavCommands(program);
-registerProductsCommands(program);
-registerTaxCommands(program);
-registerInventoryCommands(program);
-registerAdobeIoEventsCommands(program);
+
+const profile = await getActiveProfile();
+
+if (profile) {
+    registerWebsitesCommands(program);
+    registerStoresCommands(program);
+    registerCustomersCommands(program);
+    registerOrdersCommands(program);
+    registerEavCommands(program);
+    registerProductsCommands(program);
+    registerTaxCommands(program);
+    registerInventoryCommands(program);
+
+    if (profile.type === 'ac-cloud-paas' || profile.type === 'ac-saas') {
+        registerAdobeIoEventsCommands(program);
+        registerCompanyCommands(program);
+    }
+}
+
+program.hook('preAction', async (thisCommand, actionCommand) => {
+    // Check if we have an active profile and if format is not json/xml
+    // Note: 'options' are available on the command that has them defined.
+    // actionCommand is the command actually being executed.
+    if (profile) {
+        const config = await loadConfig();
+        if (config.showActiveConnectionHeader !== false) {
+            const opts = actionCommand.opts();
+            if (opts.format !== 'json' && opts.format !== 'xml') {
+                console.log(chalk.cyan(`Active Connection: ${chalk.bold(profile.name)} (${profile.type})`));
+                console.log(chalk.gray('━'.repeat(60)) + '\n');
+            }
+        }
+    }
+});
 
 function resolveCommandMatch(parent, token) {
     const tokenLower = token.toLowerCase();
+
+    // Check for exact match first
+    const exactMatch = parent.commands.find((cmd) => {
+        return cmd.name().toLowerCase() === tokenLower;
+    });
+
+    if (exactMatch) {
+        return {
+            match: exactMatch,
+            matches: [exactMatch]
+        };
+    }
+
     const matches = parent.commands.filter((cmd) => {
         const name = cmd.name().toLowerCase();
         if (name.startsWith(tokenLower)) return true;
