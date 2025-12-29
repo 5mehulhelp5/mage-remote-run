@@ -38,30 +38,24 @@ program
 
 
 
-import { registerCommands } from '../lib/command-registry.js';
-import { getActiveProfile } from '../lib/config.js';
-
-const profile = await getActiveProfile();
-
-registerCommands(program, profile);
-import { registerCommands } from '../lib/command-registry.js';
-
 import {
-    registerConnectionCommands,
-    registerCoreCommands,
-    registerCloudCommands
+  registerConnectionCommands,
+  registerCoreCommands,
+  registerCloudCommands
 } from '../lib/command-registry.js';
+import { getActiveProfile } from '../lib/config.js';
 import { startMcpServer } from '../lib/mcp.js';
+
 registerConnectionCommands(program);
 
 program.command('mcp')
-    .description('Run as MCP server')
-    .option('--transport <type>', 'Transport type (stdio, http)', 'stdio')
-    .option('--host <host>', 'HTTP Host', '127.0.0.1')
-    .option('--port <port>', 'HTTP Port', '18098')
-    .action(async (options) => {
-        await startMcpServer(options);
-    });
+  .description('Run as MCP server')
+  .option('--transport <type>', 'Transport type (stdio, http)', 'stdio')
+  .option('--host <host>', 'HTTP Host', '127.0.0.1')
+  .option('--port <port>', 'HTTP Port', '18098')
+  .action(async (options) => {
+    await startMcpServer(options);
+  });
 
 const profile = await getActiveProfile();
 
