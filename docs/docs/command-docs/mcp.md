@@ -1,6 +1,6 @@
 ---
 title: mcp
-sidebar_position: 13
+sidebar_position: 9
 ---
 
 # MCP Server

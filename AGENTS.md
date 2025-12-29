@@ -33,3 +33,7 @@ This document provides context for AI agents working on this codebase.
     2. Define `register<Entity>Commands`.
     3. Register it in `bin/mage-remote-run.js`.
     4. Add unit tests in `tests/<entity>.test.js`.
+
+## Docs
+
+- **Command Docs Ordering**: In `docs/docs/command-docs`, keep `index.md` (Command Reference) first, then sort the remaining files alphabetically by filename. Update each file's `sidebar_position` to match that order.

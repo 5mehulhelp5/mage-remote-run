@@ -2,7 +2,7 @@
 id: inventory
 title: Inventory Commands
 sidebar_label: Inventory
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 # Inventory Commands
