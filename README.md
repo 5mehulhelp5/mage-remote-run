@@ -11,6 +11,8 @@ This tool is in an early stage and not yet stable. Expect breaking changes as th
 - **Connection Management**: Easily switch between multiple Magento instances (SaaS/PaaS).
 - **Interactive Prompts**: User-friendly wizard for configuration and command inputs.
 - **Rich Output**: Formatted tables and structured data display.
+- **Interactive Console (REPL)**: Run CLI commands or JavaScript in a live session.
+- **MCP Server**: Expose commands as MCP tools over stdio or HTTP (SSE).
 - **Comprehensive API Support**:
     - **Stores**: Manage websites, stores, and store views.
     - **Customers**: List, search, show, and delete customers.
@@ -82,6 +84,27 @@ The CLI supports multiple profiles. You can configure them interactively.
   node bin/mage-remote-run.js order latest
   node bin/mage-remote-run.js order show <increment_id>
   ```
+
+### Interactive Console (REPL)
+
+```bash
+node bin/mage-remote-run.js console
+# or
+node bin/mage-remote-run.js repl
+```
+
+Inside the console, you can run commands directly (for example, `website list`) or evaluate JavaScript with top-level `await`.
+
+### MCP Server
+
+Expose the CLI as an MCP server:
+
+```bash
+node bin/mage-remote-run.js mcp --transport stdio
+node bin/mage-remote-run.js mcp --transport http --host 127.0.0.1 --port 18098
+```
+
+Commands are registered as tools (for example, `website list` becomes `website_list`), and tool inputs map to the same CLI arguments and options.
 
 ## Development
 

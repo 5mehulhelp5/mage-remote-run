@@ -19,5 +19,7 @@ mage-remote-run commands are grouped by resource type. Each command uses the act
 - `eav`: Manage attribute sets.
 - `tax`: Manage tax classes.
 - `company`: Manage company information.
+- `console`: Interactive console (REPL).
+- `mcp`: Run the MCP server.
 
 Run `mage-remote-run --help` to see all available commands and global options.

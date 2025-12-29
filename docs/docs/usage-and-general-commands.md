@@ -30,6 +30,14 @@ Commander provides the standard flags:
 - `-h, --help`: Show help for a command
 - `-V, --version`: Show version information
 
+## Interactive Console (REPL)
+
+See the `console` command reference for usage, globals, and options.
+
+## MCP Server
+
+See the `mcp` command reference for setup, options, and transport details.
+
 ## Connection Profiles
 
 All API commands use the active connection profile. Start by creating one:
