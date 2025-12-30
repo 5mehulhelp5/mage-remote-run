@@ -84,4 +84,25 @@ describe('Order Commands', () => {
         expect(mockClient.get).toHaveBeenCalledWith('V1/orders/1', expect.anything(), expect.anything());
         expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Order Information'));
     });
+
+    it('cancel: should cancel an order', async () => {
+        mockClient.post = jest.fn().mockResolvedValue(true);
+        await program.parseAsync(['node', 'test', 'order', 'cancel', '123']);
+        expect(mockClient.post).toHaveBeenCalledWith('V1/orders/123/cancel');
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Order 123 cancelled'));
+    });
+
+    it('hold: should hold an order', async () => {
+        mockClient.post = jest.fn().mockResolvedValue(true);
+        await program.parseAsync(['node', 'test', 'order', 'hold', '123']);
+        expect(mockClient.post).toHaveBeenCalledWith('V1/orders/123/hold');
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Order 123 put on hold'));
+    });
+
+    it('unhold: should unhold an order', async () => {
+        mockClient.post = jest.fn().mockResolvedValue(true);
+        await program.parseAsync(['node', 'test', 'order', 'unhold', '123']);
+        expect(mockClient.post).toHaveBeenCalledWith('V1/orders/123/unhold');
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Order 123 released from hold'));
+    });
 });

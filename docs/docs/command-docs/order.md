@@ -64,3 +64,27 @@ Add a status history comment (prompts for status and comment).
 ```bash
 mage-remote-run order edit 42
 ```
+
+## order cancel `<id>`
+
+Cancel an order.
+
+```bash
+mage-remote-run order cancel 42
+```
+
+## order hold `<id>`
+
+Put an order on hold.
+
+```bash
+mage-remote-run order hold 42
+```
+
+## order unhold `<id>`
+
+Release an order from hold.
+
+```bash
+mage-remote-run order unhold 42
+```
