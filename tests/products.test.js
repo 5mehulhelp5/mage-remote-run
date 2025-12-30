@@ -109,4 +109,15 @@ describe('Product Commands', () => {
         expect(mockClient.get).toHaveBeenCalledWith('V1/products/types');
         expect(consoleLogSpy).toHaveBeenCalledWith('MOCK_TABLE');
     });
+
+    it('media list: should list product media', async () => {
+        mockClient.get.mockResolvedValue([
+            { id: 1, media_type: 'image', file: '/i/m/img.jpg', label: 'Image', position: 1, disabled: false }
+        ]);
+
+        await program.parseAsync(['node', 'test', 'product', 'media', 'list', 'TS123']);
+
+        expect(mockClient.get).toHaveBeenCalledWith('V1/products/TS123/media');
+        expect(consoleLogSpy).toHaveBeenCalledWith('MOCK_TABLE');
+    });
 });
