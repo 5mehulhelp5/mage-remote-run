@@ -54,3 +54,89 @@ mage-remote-run company show <companyId> [options]
 ```bash
 mage-remote-run company show 1
 ```
+
+## Create Company
+
+Create a new company. Interactive prompts will guide you.
+
+```bash
+mage-remote-run company create
+```
+
+## Update Company
+
+Update company details interactively.
+
+```bash
+mage-remote-run company update <companyId>
+```
+
+## Delete Company
+
+Delete a company.
+
+```bash
+mage-remote-run company delete <companyId>
+```
+
+## Company Structure
+
+Show basic company structure.
+
+```bash
+mage-remote-run company structure <companyId>
+```
+
+## Company Roles
+
+Manage B2B roles.
+
+### List Roles
+
+```bash
+mage-remote-run company role list
+```
+
+### Show Role
+
+```bash
+mage-remote-run company role show <roleId>
+```
+
+## Company Credits
+
+Manage company credits.
+
+### Show Credit
+
+View credit balance and limits.
+
+```bash
+mage-remote-run company credit show <companyId>
+```
+
+### Credit History
+
+View credit transaction history.
+
+```bash
+mage-remote-run company credit history <companyId>
+```
+
+### Increase Balance
+
+Increase company credit balance.
+
+```bash
+mage-remote-run company credit increase <creditId> <amount>
+# Optional: --comment "Reason" --po "PO123"
+```
+
+### Decrease Balance
+
+Decrease company credit balance.
+
+```bash
+mage-remote-run company credit decrease <creditId> <amount>
+# Optional: --comment "Reason" --po "PO123"
+```

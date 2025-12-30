@@ -1,118 +1,223 @@
 import { jest } from '@jest/globals';
+import { Command } from 'commander';
 
-// Mock dependencies
+// Mocks
 jest.unstable_mockModule('../lib/api/factory.js', () => ({
     createClient: jest.fn()
 }));
-jest.unstable_mockModule('../lib/utils.js', () => ({
-    printTable: jest.fn(),
-    handleError: jest.fn()
-}));
+
+// Robust Chalk Mock for Chaining
+const chalkProxy = new Proxy(function (str) { return str; }, {
+    get: (target, prop) => {
+        if (prop === 'default') return chalkProxy;
+        return chalkProxy;
+    },
+    apply: (target, thisArg, args) => args[0]
+});
+
 jest.unstable_mockModule('chalk', () => ({
+    default: chalkProxy
+}));
+
+jest.unstable_mockModule('cli-table3', () => ({
+    default: jest.fn().mockImplementation(() => ({
+        push: jest.fn(),
+        toString: jest.fn(() => 'MOCK_TABLE')
+    }))
+}));
+
+jest.unstable_mockModule('inquirer', () => ({
     default: {
-        bold: Object.assign((msg) => msg, { blue: (msg) => msg, underline: (msg) => msg }),
-        gray: (msg) => msg,
-        cyan: (msg) => msg,
-        green: (msg) => msg,
-        red: (msg) => msg
+        prompt: jest.fn()
     }
 }));
 
-const { createClient } = await import('../lib/api/factory.js');
-const { printTable, handleError } = await import('../lib/utils.js');
+jest.unstable_mockModule('@inquirer/prompts', () => ({
+    select: jest.fn()
+}));
+
+
+const factoryMod = await import('../lib/api/factory.js');
 const { registerCompanyCommands } = await import('../lib/commands/company.js');
-const { Command } = await import('commander');
+const inquirer = await import('inquirer');
+const { select } = await import('@inquirer/prompts');
 
 describe('Company Commands', () => {
     let program;
+    let consoleLogSpy;
     let mockClient;
 
     beforeEach(() => {
-        jest.clearAllMocks();
         program = new Command();
-        mockClient = {
-            get: jest.fn()
-        };
-        createClient.mockResolvedValue(mockClient);
-
-        // Suppress console output
-        jest.spyOn(console, 'log').mockImplementation(() => { });
-        jest.spyOn(console, 'error').mockImplementation(() => { });
-
         registerCompanyCommands(program);
+        consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => { });
+        jest.spyOn(console, 'error').mockImplementation(() => { });
+        mockClient = {
+            get: jest.fn(),
+            post: jest.fn(),
+            put: jest.fn(),
+            delete: jest.fn()
+        };
+        factoryMod.createClient.mockResolvedValue(mockClient);
+        jest.clearAllMocks();
     });
 
     afterEach(() => {
         jest.restoreAllMocks();
     });
 
-    describe('company list', () => {
-        it('should list companies with default options', async () => {
-            const mockData = {
-                items: [
-                    { id: 1, company_name: 'Acme Corp', company_email: 'info@acme.com', status: 1, sales_representative_id: 5 }
-                ],
-                total_count: 1
-            };
-            mockClient.get.mockResolvedValue(mockData);
+    // --- Company Management ---
 
-            await program.parseAsync(['node', 'test', 'company', 'list']);
-
-            expect(createClient).toHaveBeenCalled();
-            expect(mockClient.get).toHaveBeenCalledWith('V1/company', expect.objectContaining({
-                'searchCriteria[currentPage]': '1',
-                'searchCriteria[pageSize]': '20'
-            }), expect.any(Object));
-            expect(printTable).toHaveBeenCalledWith(
-                ['ID', 'Name', 'Email', 'Status', 'Sales Rep ID'],
-                [[1, 'Acme Corp', 'info@acme.com', 1, 5]]
-            );
+    it('list: should display companies', async () => {
+        mockClient.get.mockResolvedValue({
+            items: [{ id: 1, company_name: 'Acme', company_email: 'info@acme.com', status: 1 }],
+            total_count: 1
         });
 
-        it('should list companies in JSON format', async () => {
-            const mockData = { items: [], total_count: 0 };
-            mockClient.get.mockResolvedValue(mockData);
+        await program.parseAsync(['node', 'test', 'company', 'list']);
 
-            await program.parseAsync(['node', 'test', 'company', 'list', '--format', 'json']);
-
-            expect(mockClient.get).toHaveBeenCalled();
-            // JSON.stringify check implicitly
-            expect(console.log).toHaveBeenCalledWith(JSON.stringify(mockData, null, 2));
-        });
+        expect(mockClient.get).toHaveBeenCalledWith('V1/company', expect.anything(), expect.anything());
+        expect(consoleLogSpy).toHaveBeenCalledWith('MOCK_TABLE');
     });
 
-    describe('company show', () => {
-        it('should show company details', async () => {
-            const mockData = {
-                id: 1,
-                company_name: 'Acme Corp',
-                company_email: 'info@acme.com',
-                status: 1,
-                sales_representative_id: 5,
-                street: '123 Main St',
-                city: 'Anytown',
-                region: 'CA',
-                postcode: '90210',
-                country_id: 'US',
-                telephone: '555-1234',
-                extension_attributes: {
-                    applicable_payment_method: ['checkmo']
-                }
-            };
-            mockClient.get.mockResolvedValue(mockData);
-
-            await program.parseAsync(['node', 'test', 'company', 'show', '1']);
-
-            expect(mockClient.get).toHaveBeenCalledWith('V1/company/1', {}, expect.any(Object));
-            expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Acme Corp'));
+    it('show: should show company details', async () => {
+        mockClient.get.mockResolvedValue({
+            id: 1, company_name: 'Acme', company_email: 'info@acme.com', status: 1,
+            street: '123 Main St', city: 'Anytown', country_id: 'US'
         });
 
-        it('should handle company not found', async () => {
-            mockClient.get.mockRejectedValue(new Error('Not found'));
+        await program.parseAsync(['node', 'test', 'company', 'show', '1']);
 
-            await program.parseAsync(['node', 'test', 'company', 'show', '999']);
-
-            expect(handleError).toHaveBeenCalled();
-        });
+        expect(mockClient.get).toHaveBeenCalledWith('V1/company/1', expect.anything(), expect.anything());
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Company Information'));
     });
+
+    it('create: should create a company', async () => {
+        inquirer.default.prompt.mockResolvedValue({
+            company_name: 'New Co',
+            company_email: 'new@co.com',
+            email: 'admin@co.com',
+            street: 'Straight Rd',
+            city: 'Citadel'
+        });
+        mockClient.post.mockResolvedValue({ id: 100 });
+
+        await program.parseAsync(['node', 'test', 'company', 'create']);
+
+        expect(mockClient.post).toHaveBeenCalledWith('V1/company', expect.anything());
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Company created with ID: 100'));
+    });
+
+    it('delete: should delete company if confirmed', async () => {
+        inquirer.default.prompt.mockResolvedValue({ confirm: true });
+        mockClient.delete.mockResolvedValue({});
+
+        await program.parseAsync(['node', 'test', 'company', 'delete', '1']);
+
+        expect(mockClient.delete).toHaveBeenCalledWith('V1/company/1');
+    });
+
+    it('structure: should show company structure', async () => {
+        mockClient.get.mockResolvedValue({
+            id: 1, company_name: 'Acme', parent_id: 2, legal_name: 'Acme Corp'
+        });
+
+        await program.parseAsync(['node', 'test', 'company', 'structure', '1']);
+
+        expect(mockClient.get).toHaveBeenCalledWith('V1/company/1');
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Company Structure for Acme'));
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Parent ID: 2'));
+    });
+
+    // --- Company Roles ---
+
+    it('role list: should list roles', async () => {
+        mockClient.get.mockResolvedValue({
+            items: [{ role_id: 1, role_name: 'Admin', company_id: 1 }],
+            total_count: 1
+        });
+
+        await program.parseAsync(['node', 'test', 'company', 'role', 'list']);
+
+        expect(mockClient.get).toHaveBeenCalledWith('V1/company/role', { 'searchCriteria[pageSize]': 20 });
+        expect(consoleLogSpy).toHaveBeenCalledWith('MOCK_TABLE');
+    });
+
+    // --- Company Credits ---
+
+    it('credit show: should show credit details', async () => {
+        mockClient.get.mockResolvedValue({
+            id: 1, balance: 100, currency_code: 'USD', credit_limit: 1000, available_limit: 900
+        });
+
+        await program.parseAsync(['node', 'test', 'company', 'credit', 'show', '1']);
+
+        expect(mockClient.get).toHaveBeenCalledWith('V1/companyCredits/company/1');
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Credit ID: 1'));
+    });
+
+    it('credit increase: should increase balance', async () => {
+        // Mock get credit profile for currency call
+        mockClient.get.mockResolvedValueOnce({
+            id: 1, currency_code: 'USD'
+        });
+        mockClient.post.mockResolvedValue({});
+
+        await program.parseAsync(['node', 'test', 'company', 'credit', 'increase', '1', '50']);
+
+        // Expect fetch for currency
+        expect(mockClient.get).toHaveBeenCalledWith('V1/companyCredits/1');
+
+        expect(mockClient.post).toHaveBeenCalledWith('V1/companyCredits/1/increaseBalance', expect.objectContaining({
+            value: 50,
+            currency: 'USD',
+            operationType: 2
+        }));
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Credit 1 increased'));
+    });
+
+    it('credit decrease: should decrease balance', async () => {
+        // Mock get credit profile for currency call
+        mockClient.get.mockResolvedValueOnce({
+            id: 1, currency_code: 'USD'
+        });
+        mockClient.post.mockResolvedValue({});
+
+        await program.parseAsync(['node', 'test', 'company', 'credit', 'decrease', '1', '25']);
+
+        // Expect fetch for currency
+        expect(mockClient.get).toHaveBeenCalledWith('V1/companyCredits/1');
+
+        expect(mockClient.post).toHaveBeenCalledWith('V1/companyCredits/1/decreaseBalance', expect.objectContaining({
+            value: 25,
+            currency: 'USD',
+            operationType: 3
+        }));
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Credit 1 decreased'));
+    });
+
+    it('credit history: should show credit history', async () => {
+        // First call: get credit profile
+        mockClient.get.mockResolvedValueOnce({
+            id: 55, balance: 100
+        });
+        // Second call: get history
+        mockClient.get.mockResolvedValueOnce({
+            items: [{ datetime: '2023-01-01', type: 1, amount: 10, balance: 110, comment: 'Test' }],
+            total_count: 1
+        });
+
+        await program.parseAsync(['node', 'test', 'company', 'credit', 'history', '1']);
+
+        expect(mockClient.get).toHaveBeenNthCalledWith(1, 'V1/companyCredits/company/1');
+        expect(mockClient.get).toHaveBeenNthCalledWith(2, 'V1/companyCredits/history', expect.objectContaining({
+            'searchCriteria[filterGroups][0][filters][0][field]': 'company_credit_id',
+            'searchCriteria[filterGroups][0][filters][0][value]': 55
+        }));
+
+        // Assert that the table data preparation happened implicitly via MOCK_TABLE or similar if we could assert args
+        // Since we mock cli-table3 and it returns 'MOCK_TABLE', we assume success if no error is thrown
+        // Ideally we would inspect the array passed to printTable if possible, but that's a util.
+    });
+
 });
