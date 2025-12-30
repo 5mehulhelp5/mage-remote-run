@@ -6,6 +6,7 @@
   "scripts": {
     "test": "NODE_OPTIONS=\"--experimental-vm-modules --localstorage-file=./.localstorage\" jest",
     "start": "node bin/mage-remote-run.js",
+    "dev:api-discover": "node scripts/parse_swagger.cjs",
     "release": "release-it"
   },
   "keywords": [],

@@ -66,3 +66,9 @@ This document provides context for AI agents working on this codebase.
 - **User Interaction**: Use `@inquirer/prompts`.
 - **Output**: Use `chalk` for colors.
 
+## Tools
+
+Helper scripts and tools available for development:
+
+- `npm run dev:api-discover`: Parses local Swagger files (`api-specs/`) and lists available API endpoints grouped by domain. Useful for discovering new endpoints to implement.
+
