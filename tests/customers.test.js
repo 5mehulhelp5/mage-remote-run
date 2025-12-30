@@ -114,6 +114,29 @@ describe('Customers Commands', () => {
 
         expect(mockClient.post).toHaveBeenCalledWith('V1/customers/confirm', expect.anything());
     });
+
+    it('create: should create a new customer', async () => {
+        inquirer.default.prompt.mockResolvedValue({
+            firstname: 'John',
+            lastname: 'Doe',
+            email: 'john@example.com',
+            password: 'Password123'
+        });
+        mockClient.post.mockResolvedValue({ id: 1, email: 'john@example.com' });
+
+        await program.parseAsync(['node', 'test', 'customer', 'create']);
+
+        expect(mockClient.post).toHaveBeenCalledWith('V1/customers', {
+            customer: {
+                firstname: 'John',
+                lastname: 'Doe',
+                email: 'john@example.com'
+            },
+            password: 'Password123'
+        });
+        expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Customer created with ID: 1'));
+    });
+
     it('group list: should list customer groups', async () => {
         mockClient.get.mockResolvedValue({
             items: [{ id: 1, code: 'General', tax_class_id: 3 }],

@@ -20,6 +20,14 @@ mage-remote-run customer list --page 1 --size 20
 - `-s, --size <number>`: Page size (default: 20)
 - `-f, --format <type>`: Output format (text, json, xml) (default: text)
 
+## customer create
+
+Create a new customer (interactive).
+
+```bash
+mage-remote-run customer create
+```
+
 ### `customer group`
 
 Commands for managing customer groups.
