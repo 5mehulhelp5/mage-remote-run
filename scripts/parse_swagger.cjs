@@ -33,9 +33,9 @@ files.forEach(file => {
     console.log(`Total endpoints: ${endpoints.length}`);
 
     // List endpoints for important groups
-    const importantGroups = ['products', 'orders', 'customers', 'categories', 'inventory', 'store', 'directory', 'modules'];
+    const importantGroups = ['company', 'companyCredits'];
 
-    console.log('\n--- Important Endpoints ---\n');
+    console.log('\n--- Company Endpoints ---\n');
     importantGroups.forEach(group => {
         console.log(`\n### ${group.toUpperCase()} ###`);
         const groupEndpoints = endpoints.filter(ep => {
