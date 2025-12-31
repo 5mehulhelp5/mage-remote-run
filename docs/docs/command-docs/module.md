@@ -5,6 +5,10 @@ sidebar_position: 19
 
 # Module Commands
 
+:::info
+These commands are not available in **Adobe Commerce as a Cloud Service** connection profiles.
+:::
+
 Manage Magento modules.
 
 ## module list
