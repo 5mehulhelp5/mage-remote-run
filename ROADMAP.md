@@ -125,7 +125,7 @@ Why:
 
 Deliver:
 - [ ] `invoice`: list/show/create/capture/void/email/comments
-- [ ] `shipment`: create/show/label/track/email/comments
+- [x] `shipment`: create/show/label/track/email/comments
 - [ ] `creditmemo`: create/refund/show/email/comments
 - [ ] Expand `order` to include action endpoints (where available): invoice/ship/refund
 
@@ -234,8 +234,8 @@ Use this as a “missing list” to drive implementation planning:
   - [ ] (SaaS) `media`
 - Sales:
   - [ ] `invoices`
-  - [ ] `shipment`
-  - [ ] `shipments`
+  - [x] `shipment`
+  - [x] `shipments`
   - [ ] `creditmemo`
   - [ ] `creditmemos`
   - [ ] `returns`
