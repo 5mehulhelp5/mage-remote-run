@@ -40,6 +40,7 @@ jest.unstable_mockModule('chalk', () => ({
         gray: (t) => t,
         cyan: (t) => t,
         bold: (t) => t,
+        hex: () => (t) => t,
     }
 }));
 
