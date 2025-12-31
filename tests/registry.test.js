@@ -19,7 +19,8 @@ const registrars = {
     registerConsoleCommand: jest.fn(),
     registerConnectionCommands: jest.fn(),
     registerCartCommands: jest.fn(),
-    registerModulesCommands: jest.fn()
+    registerModulesCommands: jest.fn(),
+    registerShipmentCommands: jest.fn()
 };
 
 // Mock individual modules
@@ -40,6 +41,7 @@ jest.unstable_mockModule('../lib/commands/import.js', () => ({ registerImportCom
 jest.unstable_mockModule('../lib/commands/console.js', () => ({ registerConsoleCommand: registrars.registerConsoleCommand }));
 jest.unstable_mockModule('../lib/commands/cart.js', () => ({ registerCartCommands: registrars.registerCartCommands }));
 jest.unstable_mockModule('../lib/commands/modules.js', () => ({ registerModulesCommands: registrars.registerModulesCommands }));
+jest.unstable_mockModule('../lib/commands/shipments.js', () => ({ registerShipmentCommands: registrars.registerShipmentCommands }));
 
 const { registerCommands } = await import('../lib/command-registry.js');
 
@@ -67,6 +69,7 @@ describe('Command Registry', () => {
         expect(registrars.registerTaxCommands).toHaveBeenCalled();
         expect(registrars.registerCartCommands).toHaveBeenCalled();
         expect(registrars.registerInventoryCommands).toHaveBeenCalled();
+        expect(registrars.registerShipmentCommands).toHaveBeenCalled();
         expect(registrars.registerConsoleCommand).toHaveBeenCalled();
     };
 
