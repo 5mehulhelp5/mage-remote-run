@@ -102,9 +102,7 @@ To keep the CLI predictable, each API “group” should map to a top-level comm
 
 - [ ] `bulk` (job status + progress)
 - [ ] `directory` (PaaS-only)
-- [ ] `directory` (PaaS-only)
 - [x] `modules`
-- [ ] `integration` / `token` (admin/customer tokens)
 - [ ] `integration` / `token` (admin/customer tokens)
 - [ ] `tfa` (PaaS-only)
 
@@ -263,7 +261,6 @@ Use this as a “missing list” to drive implementation planning:
   - [ ] `bulk`
   - [ ] (PaaS) `directory`
   - [ ] (PaaS) `integration`
-  - [ ] (PaaS) `tfa`
   - [ ] (PaaS) `tfa`
   - [x] `modules`
   - [ ] (SaaS) `oope_*`
