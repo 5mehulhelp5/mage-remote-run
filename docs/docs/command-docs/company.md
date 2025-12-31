@@ -22,7 +22,7 @@ mage-remote-run company list [options]
 ### Options
 
 | Option | Description | Default |
-|Params|---|---|
+|---|---|---|
 | `-p, --page <number>` | Page number | 1 |
 | `-s, --size <number>` | Page size | 20 |
 | `--sort-by <field>` | Field to sort by | `entity_id` |
