@@ -1,5 +1,5 @@
 ---
-title: Purchase Order Cart
+title: purchase-order-cart
 sidebar_position: 4
 ---
 

@@ -1,4 +1,5 @@
 ---
+title: cart
 sidebar_position: 10
 ---
 
